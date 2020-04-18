@@ -1,11 +1,19 @@
-require('dotenv').config()
-const axios = require('axios')
-const API_KEY = process.env.API_KEY
-const fs = require('fs')
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
+require('dotenv').config();
+const axios = require('axios');
+const tracker = require('./apiKeyTracker.json');
+const fs = require('fs');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const API_ARR = JSON.parse(process.env.API_KEYS);
 
-async function gitPush () {
+function getKey(){
+  tracker.api_key_index = (tracker.api_key_index + 1) % API_ARR.length;
+  let API_KEY = API_ARR[tracker.api_key_index];
+  fs.writeFileSync('apiKeyTracker.json', JSON.stringify(tracker), 'utf8');
+  return API_KEY
+}
+
+async function gitPush() {
   try {
     await exec('git add -A && git commit -m "Update News" && git push')
   } catch (err) {
@@ -13,18 +21,14 @@ async function gitPush () {
   }
 }
 
-(async () => {
-  let res = await axios.get(`http://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=${API_KEY}`)
+let news = async () => {
+  let res = await axios.get(`http://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=${getKey()}`)
   if (res.status === 200) {
-    fs.writeFile('data/news.json', JSON.stringify(res.data), 'utf8', async (e) => {
-      if (!e) {
-        await gitPush()
-        console.log('News Updated')
-      } else {
-        console.log(e)
-      }
-    })
+    fs.writeFileSync('data/news.json', JSON.stringify(res.data), 'utf8');
+    console.log("News Updated")
   } else {
     console.log(res)
   }
-})();
+};
+
+news();

@@ -6,11 +6,34 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const API_ARR = JSON.parse(process.env.API_KEYS);
 
-function getKey(){
+const BASE_URL = 'http://newsapi.org/v2';
+
+function getKey() {
   tracker.api_key_index = (tracker.api_key_index + 1) % API_ARR.length;
+  tracker.last_updated = Date.now();
   let API_KEY = API_ARR[tracker.api_key_index];
   fs.writeFileSync('apiKeyTracker.json', JSON.stringify(tracker), 'utf8');
   return API_KEY
+}
+
+function insertParam(key, value, url) {
+  key = encodeURI(key);
+  value = encodeURI(value);
+  var kvp = url.split('&');
+  var i = kvp.length;
+  var x;
+  while (i--) {
+    x = kvp[i].split('=');
+    if (x[0] === key) {
+      x[1] = value;
+      kvp[i] = x.join('=');
+      break;
+    }
+  }
+  if (i < 0) {
+    kvp[kvp.length] = [key, value].join('=');
+  }
+  return kvp.join('&');
 }
 
 async function gitPush() {
@@ -21,14 +44,18 @@ async function gitPush() {
   }
 }
 
-let news = async () => {
-  let res = await axios.get(`http://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=${getKey()}`)
+let updateFile = async (endpoint, params, download_path) => {
+  let url = `${BASE_URL}/${endpoint}?apiKey=${getKey()}`;
+  for (let p in params) {
+    url = insertParam(p, params[p], url);
+  }
+  let res = await axios.get(url);
   if (res.status === 200) {
-    fs.writeFileSync('data/news.json', JSON.stringify(res.data), 'utf8');
-    console.log("News Updated")
+    fs.writeFileSync(download_path, JSON.stringify(res.data), 'utf8');
+    console.log(`Updated ${download_path}`)
   } else {
     console.log(res)
   }
 };
 
-news();
+updateFile("top-headlines", {category: "health", country:"in"}, "data/news.json");

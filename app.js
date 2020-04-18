@@ -10,7 +10,7 @@ const BASE_URL = 'http://newsapi.org/v2';
 
 function getKey() {
   tracker.api_key_index = (tracker.api_key_index + 1) % API_ARR.length;
-  tracker.last_updated = Date.now();
+  tracker.last_updated = Date().toString();
   let API_KEY = API_ARR[tracker.api_key_index];
   fs.writeFileSync('apiKeyTracker.json', JSON.stringify(tracker), 'utf8');
   return API_KEY
@@ -65,7 +65,8 @@ let updateFile = async (endpoint, params, download_path) => {
 };
 
 // Run every 15 minutes
-let updateTopHeadline = schedule.scheduleJob('0 */11 * * * *', async function(){
+// let updateTopHeadline = schedule.scheduleJob('0 */15 * * * *', async function(){
+let updateTopHeadline = schedule.scheduleJob('0 * * * * *', async function(){
   await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
   await gitPush()
 });

@@ -39,11 +39,6 @@ function insertParam(key, value, url) {
 
 async function gitPush() {
   try {
-    try {
-      await exec(`git remote add origin ${process.env.GIT_URL}`)
-    } catch (e) {
-      await exec(`git remote set-url origin ${process.env.GIT_URL}`);
-    }
     const c = await exec('git add -A && git commit -m "Update News" && git push origin master');
     console.log(c)
   } catch (err) {
@@ -55,7 +50,14 @@ async function gitPull(){
   if(run_git_init){
     await exec("git init && git config --global user.name 'SauravKanchan' && git config --global user.email 'sauravnk30@gmail.com'");
     console.log("Executed git init");
-    run_git_init = false
+    try {
+      await exec(`git remote add origin ${process.env.GIT_URL}`);
+      console.log("git remote add")
+    } catch (e) {
+      await exec(`git remote set-url origin ${process.env.GIT_URL}`);
+      console.log("git set url")
+    }
+    run_git_init = false;
   }
   console.log("Git pull and hard reset");
   await exec(' git pull origin master && git reset --hard origin/master');

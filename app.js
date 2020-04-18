@@ -46,18 +46,18 @@ async function gitPush() {
   }
 }
 
-async function gitPull(){
-  if(run_git_init){
+async function gitPull() {
+  if (run_git_init) {
     await exec("git init && git config --global user.name 'SauravKanchan' && git config --global user.email 'sauravnk30@gmail.com'");
     console.log("Executed git init");
-    try {
-      await exec(`git remote add origin ${process.env.GIT_URL}`);
-      console.log("git remote add")
-    } catch (e) {
-      await exec(`git remote set-url origin ${process.env.GIT_URL}`);
-      console.log("git set url")
-    }
     run_git_init = false;
+  }
+  try {
+    await exec(`git remote add origin ${process.env.GIT_URL}`);
+    console.log("git remote add")
+  } catch (e) {
+    await exec(`git remote set-url origin ${process.env.GIT_URL}`);
+    console.log("git set url")
   }
   console.log("Git pull and hard reset");
   await exec(' git pull origin master && git reset --hard origin/master');
@@ -80,11 +80,11 @@ let updateFile = async (endpoint, params, download_path) => {
 
 // Run every 15 minutes
 // let updateTopHeadline = schedule.scheduleJob('0 */15 * * * *', async function(){
-let updateTopHeadline = schedule.scheduleJob('1 * * * * *', async function(){
+let updateTopHeadline = schedule.scheduleJob('1 * * * * *', async function () {
   console.log("Update started at", Date().toString());
   await gitPull();
-  await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
+  await updateFile("top-headlines", {category: "health", country: "in"}, "top-headlines/category/health/in.json");
   await gitPush();
-  console.log("Update ended at",Date().toString());
+  console.log("Update ended at", Date().toString());
 });
 // gitPush();

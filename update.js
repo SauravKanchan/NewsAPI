@@ -62,5 +62,5 @@ let updateFile = async (endpoint, params, download_path) => {
 // Run every 15 minutes
 let updateTopHeadline = schedule.scheduleJob('* * * * * *', async function(){
   await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
-  gitPush()
+  await gitPush()
 });

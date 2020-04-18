@@ -7,6 +7,7 @@ const exec = util.promisify(require('child_process').exec);
 const API_ARR = JSON.parse(process.env.API_KEYS);
 const schedule = require('node-schedule');
 const BASE_URL = 'http://newsapi.org/v2';
+let run_git_init = tracker
 
 function getKey() {
   tracker.api_key_index = (tracker.api_key_index + 1) % API_ARR.length;
@@ -38,7 +39,11 @@ function insertParam(key, value, url) {
 
 async function gitPush() {
   try {
-    // await exec(`git init`);
+    if(run_git_init){
+      await exec("git init && git config --global user.name 'SauravKanchan' && git config --global user.email 'sauravnk30@gmail.com'");
+      console.log("Executed git init");
+      run_git_init = false
+    }
     try {
       await exec(`git remote add origin ${process.env.GIT_URL}`)
     } catch (e) {

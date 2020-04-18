@@ -38,8 +38,13 @@ function insertParam(key, value, url) {
 
 async function gitPush() {
   try {
-    const d = await exec('git add -A && git commit -m "Update News" && git push')
-    console.log(d)
+    try {
+      await exec(`git remote add origin ${process.env.GIT_URL}`)
+    } catch (e) {
+      await exec(`git remote set-url origin ${process.env.GIT_URL}`);
+    }
+    const c = await exec('git add -A && git commit -m "Update News" && git push');
+    console.log(a, b, c)
   } catch (err) {
     console.error(err)
   }
@@ -60,7 +65,8 @@ let updateFile = async (endpoint, params, download_path) => {
 };
 
 // Run every 15 minutes
-let updateTopHeadline = schedule.scheduleJob('* * * * * *', async function(){
-  await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
-  await gitPush()
-});
+// let updateTopHeadline = schedule.scheduleJob('0 */11 * * * *', async function(){
+//   await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
+//   await gitPush()
+// });
+gitPush();

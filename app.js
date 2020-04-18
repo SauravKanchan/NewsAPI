@@ -38,7 +38,7 @@ function insertParam(key, value, url) {
 
 async function gitPush() {
   try {
-    await exec(`git init`);
+    // await exec(`git init`);
     try {
       await exec(`git remote add origin ${process.env.GIT_URL}`)
     } catch (e) {

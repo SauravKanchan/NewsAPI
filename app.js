@@ -48,7 +48,7 @@ async function gitPush() {
 
 async function gitPull() {
   if (run_git_init) {
-    await exec("git init && git config --global user.name 'SauravKanchan' && git config --global user.email 'sauravnk30@gmail.com'");
+    await exec("git init && git config user.name 'SauravKanchan' && git config user.email 'sauravnk30@gmail.com'");
     console.log("Executed git init");
     run_git_init = false;
   }

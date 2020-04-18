@@ -49,11 +49,17 @@ async function gitPush() {
     } catch (e) {
       await exec(`git remote set-url origin ${process.env.GIT_URL}`);
     }
-    const c = await exec('git pull origin master && git add -A && git commit -m "Update News" && git push origin master');
+    const c = await exec('git add -A && git commit -m "Update News" && git push origin master');
     console.log(c)
   } catch (err) {
     console.error(err)
   }
+}
+
+async function gitPull(){
+  console.log("Git pull and hard reset");
+  await exec(' git pull origin master && git reset --hard origin/master');
+  console.log("Git pull command succeed");
 }
 
 let updateFile = async (endpoint, params, download_path) => {
@@ -74,6 +80,7 @@ let updateFile = async (endpoint, params, download_path) => {
 // let updateTopHeadline = schedule.scheduleJob('0 */15 * * * *', async function(){
 let updateTopHeadline = schedule.scheduleJob('1 * * * * *', async function(){
   console.log("Update started at", Date().toString());
+  await gitPull();
   await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
   await gitPush();
   console.log("Update ended at",Date().toString());

@@ -38,6 +38,7 @@ function insertParam(key, value, url) {
 
 async function gitPush() {
   try {
+    await exec(`git init`);
     try {
       await exec(`git remote add origin ${process.env.GIT_URL}`)
     } catch (e) {
@@ -67,7 +68,9 @@ let updateFile = async (endpoint, params, download_path) => {
 // Run every 15 minutes
 // let updateTopHeadline = schedule.scheduleJob('0 */15 * * * *', async function(){
 let updateTopHeadline = schedule.scheduleJob('0 * * * * *', async function(){
+  console.log("Update started at",Date.toString());
   await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
-  await gitPush()
+  await gitPush();
+  console.log("Update ended at",Date.toString());
 });
 // gitPush();

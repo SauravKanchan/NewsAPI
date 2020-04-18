@@ -60,7 +60,12 @@ async function gitPull() {
     console.log("git set url")
   }
   console.log("Git pull and hard reset");
-  await exec('git add -A && git commit -m"." && git pull origin master && git reset --hard origin/master');
+  try{
+    await exec('git add -A && git commit -m"." && git pull origin master');
+  }catch (e) {
+    console.log("pull error")
+  }
+  await exec('git reset --hard origin/master');
   console.log("Git pull command succeed");
 }
 

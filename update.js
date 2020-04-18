@@ -5,7 +5,7 @@ const fs = require('fs');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const API_ARR = JSON.parse(process.env.API_KEYS);
-
+const schedule = require('node-schedule');
 const BASE_URL = 'http://newsapi.org/v2';
 
 function getKey() {
@@ -19,9 +19,9 @@ function getKey() {
 function insertParam(key, value, url) {
   key = encodeURI(key);
   value = encodeURI(value);
-  var kvp = url.split('&');
-  var i = kvp.length;
-  var x;
+  let kvp = url.split('&');
+  let i = kvp.length;
+  let x;
   while (i--) {
     x = kvp[i].split('=');
     if (x[0] === key) {
@@ -58,4 +58,8 @@ let updateFile = async (endpoint, params, download_path) => {
   }
 };
 
-updateFile("top-headlines", {category: "health", country:"in"}, "data/news.json");
+// Run every 15 minutes
+let updateTopHeadline = schedule.scheduleJob('0 */11 * * * *', async function(){
+  await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
+  gitPush()
+});

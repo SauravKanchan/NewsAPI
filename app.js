@@ -7,7 +7,6 @@ const exec = util.promisify(require('child_process').exec);
 const API_ARR = JSON.parse(process.env.API_KEYS);
 const schedule = require('node-schedule');
 const BASE_URL = 'http://newsapi.org/v2';
-let run_git_init = tracker
 
 function getKey() {
   tracker.api_key_index = (tracker.api_key_index + 1) % API_ARR.length;
@@ -47,11 +46,8 @@ async function gitPush() {
 }
 
 async function gitPull() {
-  if (run_git_init) {
-    await exec("git init && git config user.name 'SauravKanchan' && git config user.email 'sauravnk30@gmail.com'");
-    console.log("Executed git init");
-    run_git_init = false;
-  }
+  await exec("git init && git config user.name 'SauravKanchan' && git config user.email 'sauravnk30@gmail.com'");
+  console.log("Executed git init");
   try {
     await exec(`git remote add origin ${process.env.GIT_URL}`);
     console.log("git remote add")
@@ -84,12 +80,10 @@ let updateFile = async (endpoint, params, download_path) => {
 };
 
 // Run every 15 minutes
-// let updateTopHeadline = schedule.scheduleJob('0 */15 * * * *', async function(){
-let updateTopHeadline = schedule.scheduleJob('1 * * * * *', async function () {
+let updateTopHeadline = schedule.scheduleJob('0 */15 * * * *', async function(){
   console.log("Update started at", Date().toString());
   await gitPull();
   await updateFile("top-headlines", {category: "health", country: "in"}, "top-headlines/category/health/in.json");
   await gitPush();
   console.log("Update ended at", Date().toString());
 });
-// gitPush();

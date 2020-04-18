@@ -38,7 +38,8 @@ function insertParam(key, value, url) {
 
 async function gitPush() {
   try {
-    await exec('git add -A && git commit -m "Update News" && git push')
+    const d = await exec('git add -A && git commit -m "Update News" && git push')
+    console.log(d)
   } catch (err) {
     console.error(err)
   }
@@ -59,7 +60,7 @@ let updateFile = async (endpoint, params, download_path) => {
 };
 
 // Run every 15 minutes
-let updateTopHeadline = schedule.scheduleJob('0 */11 * * * *', async function(){
+let updateTopHeadline = schedule.scheduleJob('* * * * * *', async function(){
   await updateFile("top-headlines", {category: "health", country:"in"}, "top-headlines/category/health/in.json");
   gitPush()
 });

@@ -44,7 +44,7 @@ async function gitPush() {
       await exec(`git remote set-url origin ${process.env.GIT_URL}`);
     }
     const c = await exec('git add -A && git commit -m "Update News" && git push');
-    console.log(a, b, c)
+    console.log(c)
   } catch (err) {
     console.error(err)
   }

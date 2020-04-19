@@ -3,6 +3,12 @@ from dotenv import load_dotenv
 from random import randrange
 from newsapi import NewsApiClient
 from os import getenv
+import atexit
+import time
+from flask import Flask
+from apscheduler.schedulers.background import BackgroundScheduler
+
+app = Flask(__name__)
 
 load_dotenv()
 
@@ -37,6 +43,22 @@ def push_to_github(filename, content):
         print("nothing to update")
 
 
-newsapi = NewsApiClient(api_key=get_key())
-top_headlines = newsapi.get_top_headlines(category='health', country='in')
-push_to_github("top-headlines/category/health/in.json", json.dumps(top_headlines))
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+
+def update():
+    print("Started at", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    newsapi = NewsApiClient(api_key=get_key())
+    top_headlines = newsapi.get_top_headlines(category='health', country='in')
+    push_to_github("top-headlines/category/health/in.json", json.dumps(top_headlines))
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=update, trigger="interval", seconds=15)
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
+app.run(host='0.0.0.0')

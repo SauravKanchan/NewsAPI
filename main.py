@@ -24,11 +24,11 @@ def get_key():
 
 
 def push_to_github(filename, content):
-    url = "https://api.github.com/repos/SauravKanchan/NewsAPI" + "/contents/" + filename
-    base64content = base64.b64encode(bytes(content, 'utf-8'))
+    url = "https://api.github.com/repos/SauravKanchan/NewsAPI/contents/" + filename
+    base64content = base64.urlsafe_b64encode(json.dumps(content).encode())
     data = requests.get(url + '?ref=master', headers={"Authorization": "token " + GITHUB_API_TOKEN}).json()
     sha = data['sha']
-    if base64content.decode('utf-8') + "\n" != data['content']:
+    if base64content.decode('utf-8') != data['content'].replace("\n", ""):
         message = json.dumps({"message": "update",
                               "branch": "master",
                               "content": base64content.decode("utf-8"),
@@ -52,13 +52,13 @@ def update():
     print("Started at", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
     newsapi = NewsApiClient(api_key=get_key())
     top_headlines = newsapi.get_top_headlines(category='health', country='in')
-    push_to_github("top-headlines/category/health/in.json", json.dumps(top_headlines))
+    push_to_github("top-headlines/category/health/in.json", top_headlines)
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update, trigger="interval", seconds=15)
+# scheduler.add_job(func=update, trigger="interval", minutes=10)
+scheduler.add_job(func=update, trigger="interval", seconds=10)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
-app.run(host='0.0.0.0')

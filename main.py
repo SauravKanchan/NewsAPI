@@ -56,8 +56,8 @@ def update():
 
 
 scheduler = BackgroundScheduler()
-# scheduler.add_job(func=update, trigger="interval", minutes=10)
-scheduler.add_job(func=update, trigger="interval", seconds=10)
+scheduler.add_job(func=update, trigger="interval", minutes=10)
+# scheduler.add_job(func=update, trigger="interval", seconds=10)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app

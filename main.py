@@ -25,7 +25,7 @@ def get_key():
 
 def push_to_github(filename, content):
     url = "https://api.github.com/repos/SauravKanchan/NewsAPI/contents/" + filename
-    base64content = base64.urlsafe_b64encode(json.dumps(content).encode())
+    base64content = base64.b64encode(bytes(json.dumps(content),'utf-8'))
     data = requests.get(url + '?ref=master', headers={"Authorization": "token " + GITHUB_API_TOKEN}).json()
     sha = data['sha']
     if base64content.decode('utf-8') != data['content'].replace("\n", ""):

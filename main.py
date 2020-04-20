@@ -2,14 +2,15 @@ import base64, requests, json, os, ast
 from dotenv import load_dotenv
 from random import randrange
 from newsapi import NewsApiClient
-from os import getenv
 import atexit
 import time
-from flask import Flask
+from flask import Flask, redirect
 from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime, timedelta
 
 COUNTRIES = ["in", "us", "au", "ru", "fr", "gb"]
 CATEGORIES = ["entertainment", "general", "health", "science", "sports", "technology"]
+SOURCES = ["bbc-news", "cnn", "fox-news", "google-news"]
 
 app = Flask(__name__)
 
@@ -43,15 +44,15 @@ def push_to_github(filename, content):
 
         print(resp)
     else:
-        print("nothing to update")
+        print("Everything up to date")
 
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return redirect("https://saurav.tech/NewsAPI/")
 
 
-def update():
+def update_top_headline():
     for category in CATEGORIES:
         for country in COUNTRIES:
             print("Started category:{0} country:{1} at {2}".format(category, country,
@@ -61,11 +62,24 @@ def update():
             push_to_github("top-headlines/category/{0}/{1}.json".format(category, country), top_headlines)
 
 
+def update_everything():
+    newsapi = NewsApiClient(api_key=get_key())
+    for source in SOURCES:
+        all_articles = newsapi.get_everything(sources=source,
+                                              from_param=(datetime.now() - timedelta(days=1, hours=5,
+                                                                                     minutes=30)).date().isoformat(),
+                                              language='en',
+                                              sort_by='publishedAt',
+                                              page_size=100)
+        print(all_articles["totalResults"])
+
+
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update, trigger="interval", minutes=10)
+scheduler.add_job(func=update_top_headline, trigger="interval", minutes=20)
 # scheduler.add_job(func=update, trigger="interval", minutes=1)
 if not scheduler.running:
     scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
+update_everything()

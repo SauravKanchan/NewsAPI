@@ -6,7 +6,7 @@ API_URL_FORMAT = "<BASE_URL>/top-headlines/category/<category>/<country>.json"
 
 eg: [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://saurav.tech/NewsAPI/top-headlines/category/health/in.json)
 
-```json
+```
 {
   "status": "ok",
   "totalResults": 70,
@@ -23,7 +23,7 @@ eg: [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://
       "urlToImage": "https://www.thestatesman.com/wp-content/uploads/2020/03/Tokyo2020.jpg",
       "publishedAt": "2020-04-19T14:41:24Z",
       "content": "Holding the Tokyo Olympics any time before a vaccine is found will be “very unrealistic,” according to a leading global health expert. Professor Devi Sridhar said that the development of the vaccine will be key to when the Olympics can be held.\r\nSridhar, howe… [+1886 chars]"
-    }
+    },
     ...
     ...
     ...
@@ -63,7 +63,7 @@ You can [sign up here](https://newsapi.org/account) for a free developer plan wh
 
 ## Solution
 
-This project queries the newsapi at a regular interval (currently at 10 mins) and logs the reponse to a JSON file.
+This project queries the newsapi at a regular interval and logs the reponse to a JSON file.
 This json file is then committed and pushed to github. Now one can get the latest news from this json instead of newsapi.
 
 ## Pros

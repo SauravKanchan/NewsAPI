@@ -62,8 +62,8 @@ def update():
 
 
 scheduler = BackgroundScheduler()
-# scheduler.add_job(func=update, trigger="interval", minutes=10)
-scheduler.add_job(func=update, trigger="interval", minutes=1)
+scheduler.add_job(func=update, trigger="interval", minutes=10)
+# scheduler.add_job(func=update, trigger="interval", minutes=1)
 if not scheduler.running:
     scheduler.start()
 

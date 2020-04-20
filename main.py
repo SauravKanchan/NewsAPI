@@ -8,6 +8,9 @@ import time
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
 
+COUNTRIES = ["in", "us", "au", "ru", "fr", "gb"]
+CATEGORY = ["entertainment", "general", "health", "science", "sports", "technology"]
+
 app = Flask(__name__)
 
 load_dotenv()
@@ -24,12 +27,13 @@ def get_key():
 
 
 def push_to_github(filename, content):
+    print("filename",filename)
     url = "https://api.github.com/repos/SauravKanchan/NewsAPI/contents/" + filename
-    base64content = base64.b64encode(bytes(json.dumps(content),'utf-8'))
+    base64content = base64.b64encode(bytes(json.dumps(content), 'utf-8'))
     data = requests.get(url + '?ref=master', headers={"Authorization": "token " + GITHUB_API_TOKEN}).json()
     sha = data['sha']
     if base64content.decode('utf-8') != data['content'].replace("\n", ""):
-        message = json.dumps({"message": "update",
+        message = json.dumps({"message": "update "+filename,
                               "branch": "master",
                               "content": base64content.decode("utf-8"),
                               "sha": sha
@@ -49,10 +53,11 @@ def hello_world():
 
 
 def update():
-    print("Started at", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-    newsapi = NewsApiClient(api_key=get_key())
-    top_headlines = newsapi.get_top_headlines(category='health', country='in',page_size=100)
-    push_to_github("top-headlines/category/health/in.json", top_headlines)
+    for country in COUNTRIES:
+        print("Started country {0} at {1}".format(country, time.strftime("%A, %d. %B %Y %I:%M:%S %p")))
+        newsapi = NewsApiClient(api_key=get_key())
+        top_headlines = newsapi.get_top_headlines(category='health', country='in', page_size=100)
+        push_to_github("top-headlines/category/health/{0}.json".format(country), top_headlines)
 
 
 scheduler = BackgroundScheduler()
@@ -62,3 +67,4 @@ scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
+update()

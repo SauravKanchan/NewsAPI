@@ -55,7 +55,7 @@ everything_api = "<BASE_URL>/everything/<source_id>.json"
 | Fox News | fox-news  |
 | Google News | google-news  |
 
-> NOTE: Top headlines will include sources which are available in newsapi.org 
+> NOTE: Top headlines will include all sources which are available in newsapi.org 
 
 ## Available Countries
 | Country  | 2-letter ISO 3166-1 code |

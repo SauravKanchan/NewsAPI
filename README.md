@@ -1,7 +1,7 @@
 # NewsAPI
 ```
 BASE_URL = "https://saurav.tech/NewsAPI/"
-API_URL_FORMAT = "<BASE_URL>/top-headlines/category/<category>/<country>.json"
+API_URL_FORMAT = "<BASE_URL>/top-headlines/category/<category>/<country_code>.json"
 ```
 
 eg: [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://saurav.tech/NewsAPI/top-headlines/category/health/in.json)

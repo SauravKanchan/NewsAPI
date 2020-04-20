@@ -51,13 +51,13 @@ def hello_world():
 def update():
     print("Started at", time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
     newsapi = NewsApiClient(api_key=get_key())
-    top_headlines = newsapi.get_top_headlines(category='health', country='in')
+    top_headlines = newsapi.get_top_headlines(category='health', country='in',page_size=100)
     push_to_github("top-headlines/category/health/in.json", top_headlines)
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update, trigger="interval", minutes=10)
-# scheduler.add_job(func=update, trigger="interval", seconds=10)
+# scheduler.add_job(func=update, trigger="interval", minutes=10)
+scheduler.add_job(func=update, trigger="interval", seconds=10)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app

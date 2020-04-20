@@ -1,10 +1,13 @@
 # NewsAPI
 ```
 BASE_URL = "https://saurav.tech/NewsAPI/"
-API_URL_FORMAT = "<BASE_URL>/top-headlines/category/<category>/<country_code>.json"
+top_headlines_api = "<BASE_URL>/top-headlines/category/<category>/<country_code>.json"
+everything_api = "<BASE_URL>/everything/<source_id>.json"
 ```
 
-eg: [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://saurav.tech/NewsAPI/top-headlines/category/health/in.json)
+## Example 
+-   [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://saurav.tech/NewsAPI/top-headlines/category/health/in.json)
+-   [https://saurav.tech/NewsAPI/everything/cnn.json](https://saurav.tech/NewsAPI/everything/cnn.json)
 
 ```
 {
@@ -44,8 +47,17 @@ eg: [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://
 }
 ```
 
+## Available sources for everything endpoint
+| Source  | id |
+| ------------- | ------------- |
+| BBC News  | bbc-news  |
+| CNN | cnn  |
+| Fox News | fox-news  |
+| Google News | google-news  |
 
-## Supported Countries
+> NOTE: Top headlines will include sources which are available in newsapi.org 
+
+## Available Countries
 | Country  | 2-letter ISO 3166-1 code |
 | ------------- | ------------- |
 | :india:	India  | in  |

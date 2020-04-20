@@ -55,8 +55,8 @@ def hello_world():
 def update_top_headline():
     for category in CATEGORIES:
         for country in COUNTRIES:
-            print("Started category:{0} country:{1} at {2}".format(category, country,
-                                                                   time.strftime("%A, %d. %B %Y %I:%M:%S %p")))
+            print("Started category:{0} country:{1} at :{2}".format(category, country,
+                                                                    time.strftime("%A, %d. %B %Y %I:%M:%S %p")))
             newsapi = NewsApiClient(api_key=get_key())
             top_headlines = newsapi.get_top_headlines(category=category, country=country, page_size=100)
             push_to_github("top-headlines/category/{0}/{1}.json".format(category, country), top_headlines)
@@ -65,21 +65,21 @@ def update_top_headline():
 def update_everything():
     newsapi = NewsApiClient(api_key=get_key())
     for source in SOURCES:
+        print("Started source:{0} : {1}".format(source, time.strftime("%A, %d. %B %Y %I:%M:%S %p")))
         all_articles = newsapi.get_everything(sources=source,
                                               from_param=(datetime.now() - timedelta(days=1, hours=5,
                                                                                      minutes=30)).date().isoformat(),
                                               language='en',
                                               sort_by='publishedAt',
                                               page_size=100)
-        print(all_articles["totalResults"])
+        push_to_github("everything/{0}.json".format(source), all_articles)
 
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=update_top_headline, trigger="interval", minutes=20)
-# scheduler.add_job(func=update, trigger="interval", minutes=1)
+scheduler.add_job(func=update_everything, trigger="interval", minutes=15)
 if not scheduler.running:
     scheduler.start()
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())
-update_everything()

@@ -1,4 +1,6 @@
 # NewsAPI
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSauravKanchan%2FNewsAPI.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSauravKanchan%2FNewsAPI?ref=badge_shield)
+
 
 ## API Documentation
 ```
@@ -103,3 +105,7 @@ This json file is then committed and pushed to github. Now one can get the lates
 
 - Cannot query for news (Can be fixed by cloning this repo and customizing according to your needs)
 - Slightly delayed result (Can be reduced by reducing the query time interval to newsapi)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSauravKanchan%2FNewsAPI.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSauravKanchan%2FNewsAPI?ref=badge_large)

@@ -8,6 +8,10 @@ everything_api = "<BASE_URL>/everything/<source_id>.json"
 ## Example 
 -   [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://saurav.tech/NewsAPI/top-headlines/category/health/in.json)
 -   [https://saurav.tech/NewsAPI/everything/cnn.json](https://saurav.tech/NewsAPI/everything/cnn.json)
+-   [https://saurav.tech/NewsAPI/sources.json](https://saurav.tech/NewsAPI/sources.json)
+```shell script
+curl --request GET 'https://saurav.tech/NewsAPI/top-headlines/category/health/in.json'
+```
 
 ```
 {

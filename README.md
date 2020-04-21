@@ -1,9 +1,12 @@
 # NewsAPI
+
+## API Documentation
 ```
 BASE_URL = "https://saurav.tech/NewsAPI/"
 top_headlines_api = "<BASE_URL>/top-headlines/category/<category>/<country_code>.json"
 everything_api = "<BASE_URL>/everything/<source_id>.json"
 ```
+Detailed documentation: [Postman Documentation](https://documenter.getpostman.com/view/3479169/Szf7zncp?version=latest)
 
 ## Example 
 -   [https://saurav.tech/NewsAPI/top-headlines/category/health/in.json](https://saurav.tech/NewsAPI/top-headlines/category/health/in.json)
@@ -70,6 +73,15 @@ curl --request GET 'https://saurav.tech/NewsAPI/top-headlines/category/health/in
 |  :us:	Russia | ru  |
 |  :fr:	France | fr  |
 |  :gb:	United Kingdom | gb  |
+
+## Available categories
+- business
+- entertainment
+- general
+- health
+- science
+- sports
+- technology
 
 ## Introduction
 

@@ -76,7 +76,7 @@ def update_everything():
 
 
 scheduler = BackgroundScheduler()
-INTERVAL = 1
+INTERVAL = 30
 scheduler.add_job(func=update_top_headline, trigger="interval", minutes=INTERVAL)
 scheduler.add_job(func=update_everything, trigger="interval", minutes=INTERVAL)
 if not scheduler.running:

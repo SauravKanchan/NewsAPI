@@ -9,7 +9,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 
 COUNTRIES = ["in", "us", "au", "ru", "fr", "gb"]
-CATEGORIES = ["entertainment", "general", "health", "science", "sports", "technology"]
+CATEGORIES = ["business", "entertainment", "general", "health", "science", "sports", "technology"]
 SOURCES = ["bbc-news", "cnn", "fox-news", "google-news"]
 
 app = Flask(__name__)
@@ -76,8 +76,9 @@ def update_everything():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_top_headline, trigger="interval", minutes=20)
-scheduler.add_job(func=update_everything, trigger="interval", minutes=20)
+INTERVAL = 1
+scheduler.add_job(func=update_top_headline, trigger="interval", minutes=INTERVAL)
+scheduler.add_job(func=update_everything, trigger="interval", minutes=INTERVAL)
 if not scheduler.running:
     scheduler.start()
 

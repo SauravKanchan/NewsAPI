@@ -97,7 +97,7 @@ This json file is then committed and pushed to github. Now one can get the lates
 ## Pros
 
 - No API KEY needed
-- No limit in number of requests
+- No limit on number of requests
 
 ## Cons
 

@@ -70,7 +70,7 @@ curl --request GET 'https://saurav.tech/NewsAPI/top-headlines/category/health/in
 | :india:	India  | in  |
 |  :us:	USA | us  |
 |  :australia:	Australia | au  |
-|  :us:	Russia | ru  |
+|  :ru:	Russia | ru  |
 |  :fr:	France | fr  |
 |  :gb:	United Kingdom | gb  |
 

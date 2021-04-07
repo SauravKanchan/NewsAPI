@@ -8,7 +8,7 @@ from flask import Flask, redirect
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 
-COUNTRIES = ["in", "us", "au", "ru", "fr", "gb"]
+COUNTRIES_LANGUAGES = {"in": "en", "us": "en", "au": "en", "ru": "ru", "fr": "fr", "gb": "en"}
 CATEGORIES = ["business", "entertainment", "general", "health", "science", "sports", "technology"]
 SOURCES = ["bbc-news", "cnn", "fox-news", "google-news"]
 
@@ -54,11 +54,11 @@ def hello_world():
 
 def update_top_headline():
     for category in CATEGORIES:
-        for country in COUNTRIES:
+        for country in COUNTRIES_LANGUAGES:
             print("Started category:{0} country:{1} at :{2}".format(category, country,
                                                                     time.strftime("%A, %d. %B %Y %I:%M:%S %p")))
             newsapi = NewsApiClient(api_key=get_key())
-            top_headlines = newsapi.get_top_headlines(category=category, country=country, page_size=100)
+            top_headlines = newsapi.get_top_headlines(category=category, country=country, language=COUNTRIES_LANGUAGES[country], page_size=100)
             push_to_github("top-headlines/category/{0}/{1}.json".format(category, country), top_headlines)
 
 
@@ -76,7 +76,7 @@ def update_everything():
 
 
 scheduler = BackgroundScheduler()
-INTERVAL = 30
+INTERVAL = 2
 scheduler.add_job(func=update_top_headline, trigger="interval", minutes=INTERVAL)
 scheduler.add_job(func=update_everything, trigger="interval", minutes=INTERVAL)
 if not scheduler.running:

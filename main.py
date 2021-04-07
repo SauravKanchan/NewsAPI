@@ -8,7 +8,7 @@ from flask import Flask, redirect
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 
-COUNTRIES = ["in", "us", "au", "ru", "fr", "gb"]
+COUNTRIES = ["in", "us", "au", "ru", "fr", "gb", "tr"]
 CATEGORIES = ["business", "entertainment", "general", "health", "science", "sports", "technology"]
 SOURCES = ["bbc-news", "cnn", "fox-news", "google-news"]
 
